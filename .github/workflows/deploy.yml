@@ -42,13 +42,19 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # Step 5: Upload the built files (dist folder) to GitHub Pages
+      # Step 5: Copy index.html to 404.html
+      - name: Copy index.html to 404.html
+        run: |
+          cd dist
+          cp index.html 404.html
+
+      # Step 6: Upload the built files (dist folder) to GitHub Pages
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './dist' # Upload the dist folder (build output)
 
-      # Step 6: Deploy to GitHub Pages
+      # Step 7: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
