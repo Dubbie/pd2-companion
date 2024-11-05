@@ -42,7 +42,11 @@ const itemTypes = [
             'hover:bg-white/5 hover:text-white': !checked,
           }"
         >
-          <img :src="`/images/item-types/${itemType.image}`" alt="" class="block py-3" />
+          <img
+            :src="`/pd2-companion/images/item-types/${itemType.image}`"
+            alt=""
+            class="block py-3"
+          />
           <p class="text-sm font-semibold py-2">{{ itemType.label }}</p>
         </div>
       </RadioGroupOption>
