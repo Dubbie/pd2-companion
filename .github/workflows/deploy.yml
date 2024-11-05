@@ -5,26 +5,50 @@ on:
     branches:
       - main
 
+# Set the permissions needed for GitHub Pages deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
 jobs:
-  build-and-deploy:
+  # Job for building and deploying the Vue app
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v3
+      # Step 1: Check out the repository
+      - name: Checkout
+        uses: actions/checkout@v4
 
+      # Step 2: Set up Node.js (using the appropriate Node version)
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
+      # Step 3: Install npm dependencies
       - name: Install dependencies
         run: npm install
 
-      - name: Build the project
+      # Step 4: Build the Vue project
+      - name: Build project
         run: npm run build
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      # Step 5: Upload the built files (dist folder) to GitHub Pages
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          path: './dist' # Upload the dist folder (build output)
+
+      # Step 6: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
